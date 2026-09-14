@@ -4,70 +4,436 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Akhil Ratan Misra</title>
-  <meta name="description" content="Akhil Ratan Misra — personal website. Under construction." />
+  <meta name="description" content="Akhil Ratan Misra - research, projects, and notes." />
   <style>
     :root {
-      --ink: #111111;
+      --ink: #050505;
+      --line: #0b2732;
       --paper: #ffffff;
+      --muted: #4d4d4d;
     }
-    * { box-sizing: border-box; }
-    html, body { height: 100%; margin: 0; }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+    }
+
     body {
       background: var(--paper);
       color: var(--ink);
       font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-align: center;
-      padding: 24px;
       -webkit-font-smoothing: antialiased;
     }
-    main {
-      max-width: 520px;
+
+    a {
+      color: inherit;
     }
-    .crane {
-      width: 120px;
-      height: 120px;
-      margin: 0 auto 28px;
+
+    .home {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(420px, 0.98fr) minmax(320px, 0.72fr);
+      min-height: 100svh;
+      padding: clamp(30px, 5vw, 76px) clamp(28px, 8vw, 148px);
+      column-gap: clamp(74px, 10vw, 190px);
+      overflow: hidden;
+    }
+
+    .page-nav {
+      position: absolute;
+      top: clamp(30px, 4vw, 66px);
+      right: clamp(34px, 8vw, 148px);
+      display: flex;
+      align-items: center;
+      gap: clamp(30px, 4vw, 72px);
+      z-index: 2;
+    }
+
+    .page-link {
+      display: grid;
+      grid-template-columns: 46px auto;
+      align-items: center;
+      gap: 12px;
+      width: max-content;
+      text-decoration: none;
+      font-size: clamp(1.05rem, 1.45vw, 1.48rem);
+      font-weight: 520;
+      line-height: 1;
+    }
+
+    .arrow {
+      position: relative;
+      width: 44px;
+      height: 14px;
+      transition: transform 180ms ease;
+    }
+
+    .arrow::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 34px;
+      height: 2px;
+      background: currentColor;
+      transform: translateY(-50%);
+    }
+
+    .arrow::after {
+      content: "";
+      position: absolute;
+      right: 2px;
+      top: 50%;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 11px solid currentColor;
+      transform: translateY(-50%);
+    }
+
+    .page-link:hover .arrow,
+    .page-link:focus-visible .arrow {
+      transform: translateX(9px);
+    }
+
+    .page-link:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 8px;
+    }
+
+    .intro {
+      align-self: end;
+      padding-bottom: clamp(46px, 8vh, 108px);
+    }
+
+    .identity-row {
+      display: grid;
+      grid-template-columns: 124px minmax(0, 1fr);
+      align-items: center;
+      gap: 54px;
+      margin-bottom: 58px;
+    }
+
+    .portrait {
+      width: clamp(92px, 8.2vw, 124px);
+      aspect-ratio: 1;
+      border: 4px solid var(--line);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      color: var(--line);
+      font-size: 1.35rem;
+      font-weight: 650;
+      letter-spacing: 0.04em;
+      overflow: hidden;
+    }
+
+    h1 {
+      margin: 0 0 24px;
+      font-size: clamp(2rem, 3.2vw, 3.5rem);
+      font-weight: 760;
+      line-height: 0.98;
+      letter-spacing: 0;
+      white-space: nowrap;
+    }
+
+    .socials {
+      display: flex;
+      align-items: center;
+      gap: clamp(11px, 1.2vw, 18px);
+    }
+
+    .socials a {
+      display: inline-flex;
+      width: clamp(24px, 2.1vw, 34px);
+      aspect-ratio: 1;
+      align-items: center;
+      justify-content: center;
+      transition: transform 160ms ease, opacity 160ms ease;
+    }
+
+    .socials a:hover,
+    .socials a:focus-visible {
+      transform: translateY(-3px);
+      opacity: 0.78;
+      outline: none;
+    }
+
+    .socials img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
       display: block;
     }
-    h1 {
-      font-size: clamp(1.5rem, 4vw, 2.25rem);
-      font-weight: 600;
-      letter-spacing: 0.01em;
-      margin: 0 0 10px;
+
+    .greeting {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin: 0 0 34px 16px;
+      font-size: clamp(1.65rem, 3vw, 3.1rem);
+      font-weight: 480;
+      line-height: 1.1;
     }
-    p {
-      font-size: 1rem;
-      color: #555;
+
+    .weather-icon {
+      width: clamp(32px, 3vw, 50px);
+      aspect-ratio: 1;
+      object-fit: contain;
+      display: block;
+    }
+
+    .bio-card {
+      width: min(100%, 720px);
+      min-height: clamp(118px, 13vw, 172px);
+      padding: 0 0 0 16px;
+      display: flex;
+      align-items: flex-start;
+    }
+
+    .bio-card p {
+      max-width: 66ch;
       margin: 0;
-      letter-spacing: 0.02em;
+      color: var(--muted);
+      font-size: clamp(1rem, 1.25vw, 1.25rem);
+      line-height: 1.6;
+    }
+
+    .sky-wrap {
+      position: relative;
+      margin: 0;
+      align-self: end;
+      justify-self: center;
+      width: min(32vw, 540px);
+      min-width: 310px;
+      aspect-ratio: 1;
+      border-radius: 50%;
+      overflow: hidden;
+    }
+
+    .sky-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transform: scale(1.02);
+    }
+
+    #sky-flock {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    #sky-flock canvas {
+      display: block;
+      width: 100% !important;
+      height: 100% !important;
+    }
+
+    @media (max-width: 980px) {
+      .home {
+        grid-template-columns: 1fr;
+        row-gap: 44px;
+        padding: 26px 22px 42px;
+        overflow: visible;
+      }
+
+      .page-nav {
+        position: static;
+        order: 1;
+        flex-wrap: wrap;
+        align-items: flex-start;
+        gap: 18px 28px;
+      }
+
+      .intro {
+        order: 2;
+        align-self: start;
+        padding-bottom: 0;
+      }
+
+      .sky-wrap {
+        order: 3;
+        width: min(76vw, 460px);
+        min-width: 0;
+        justify-self: center;
+      }
+
+      .identity-row {
+        grid-template-columns: 92px minmax(0, 1fr);
+        gap: 24px;
+        margin-bottom: 42px;
+      }
+
+      .page-link {
+        grid-template-columns: 38px auto;
+        gap: 10px;
+      }
+
+      .arrow {
+        width: 38px;
+      }
+
+      .arrow::before {
+        width: 29px;
+      }
+
+      .greeting {
+        margin-left: 0;
+      }
+
+      .bio-card {
+        padding-left: 0;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .identity-row {
+        grid-template-columns: 1fr;
+        gap: 20px;
+      }
+
+      .bio-card {
+        min-height: 150px;
+      }
+
+      .socials {
+        flex-wrap: wrap;
+      }
     }
   </style>
 </head>
 <body>
-  <main>
-    <!-- Construction crane icon -->
-    <svg class="crane" viewBox="0 0 100 100" fill="none" stroke="#111111" stroke-width="3"
-         stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="Construction crane">
-      <!-- horizontal jib -->
-      <line x1="12" y1="24" x2="88" y2="24" />
-      <!-- mast (vertical tower) -->
-      <line x1="46" y1="24" x2="46" y2="86" />
-      <line x1="54" y1="24" x2="54" y2="86" />
-      <!-- tower cross-bracing -->
-      <path d="M46 38 L54 50 M54 38 L46 50 M46 62 L54 74 M54 62 L46 74" stroke-width="2" />
-      <!-- counter-jib support / tie bars from top of mast to jib -->
-      <path d="M50 24 L50 14 M50 14 L20 24 M50 14 L80 24" stroke-width="2" />
-      <!-- trolley + hoist line + hook -->
-      <line x1="24" y1="24" x2="24" y2="40" />
-      <path d="M21 40 h6 M24 40 v4 a3 3 0 1 0 3 0" stroke-width="2" />
-      <!-- base -->
-      <path d="M38 86 L62 86 M42 86 L36 94 M58 86 L64 94" />
-    </svg>
-    <h1>Under Construction</h1>
-    <p>Something is being built here.</p>
+  <main class="home">
+    <nav class="page-nav" aria-label="Site pages">
+      <a class="page-link" href="research.html"><span class="arrow" aria-hidden="true"></span><span>Research</span></a>
+      <a class="page-link" href="projects.html"><span class="arrow" aria-hidden="true"></span><span>Projects</span></a>
+      <a class="page-link" href="blog.html"><span class="arrow" aria-hidden="true"></span><span>Blog</span></a>
+    </nav>
+
+    <section class="intro" aria-label="Introduction">
+      <div class="identity-row">
+        <div class="portrait" aria-label="Portrait placeholder">
+          <span>ARM</span>
+        </div>
+
+        <div>
+          <h1>Akhil Ratan Misra</h1>
+          <div class="socials" aria-label="Social links">
+            <a href="https://www.linkedin.com/" aria-label="LinkedIn">
+              <img src="assets/linkedin_icon.webp" alt="" />
+            </a>
+            <a href="https://scholar.google.com/" aria-label="Google Scholar">
+              <img src="assets/google-scholar_icon.webp" alt="" />
+            </a>
+            <a href="https://github.com/Armos05" aria-label="GitHub">
+              <img src="assets/github_icon.webp" alt="" />
+            </a>
+            <a href="https://x.com/" aria-label="X">
+              <img src="assets/x_icon.webp" alt="" />
+            </a>
+            <a href="mailto:hello@akhilratan.com" aria-label="Email">
+              <img src="assets/gmail_icon.webp" alt="" />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <p class="greeting">
+        <span>&lt; <span id="greeting-text">Good Morning</span> &gt;</span>
+        <img class="weather-icon" id="weather-icon" src="assets/climate-icons/weather-sun.png" alt="" />
+      </p>
+
+      <section class="bio-card" aria-label="Short biography">
+        <p>
+          I am interested in building thoughtful systems at the intersection of research,
+          engineering, and design. This space collects the work I am exploring, the projects
+          I am shaping, and the notes that help me think in public.
+        </p>
+      </section>
+    </section>
+
+    <figure class="sky-wrap" aria-label="Sky image">
+      <img src="assets/sky_image.png" alt="Open sky with clouds" />
+      <div id="sky-flock" aria-hidden="true"></div>
+    </figure>
   </main>
+
+  <script src="https://cdn.jsdelivr.net/npm/p5@1.11.10/lib/p5.min.js"></script>
+  <script src="flock-art/sky_flock.js"></script>
+  <script>
+    const weatherIcon = document.getElementById("weather-icon");
+    const greetingText = document.getElementById("greeting-text");
+    const weatherIcons = {
+      sun: "assets/climate-icons/weather-sun.png",
+      partly: "assets/climate-icons/weather-partly.png",
+      cloud: "assets/climate-icons/weather-cloud.png",
+      rain: "assets/climate-icons/weather-rain.png",
+      snow: "assets/climate-icons/weather-snow.png",
+      thunder: "assets/climate-icons/weather-thunder.png",
+      moon: "assets/climate-icons/weather-night.png"
+    };
+
+    function setGreeting() {
+      const hour = new Date().getHours();
+
+      if (hour >= 5 && hour < 12) {
+        greetingText.textContent = "Good Morning";
+      } else if (hour >= 12 && hour < 17) {
+        greetingText.textContent = "Good Afternoon";
+      } else if (hour >= 17 && hour < 21) {
+        greetingText.textContent = "Good Evening";
+      } else {
+        greetingText.textContent = "Good Night";
+      }
+
+      if (hour < 6 || hour >= 20) {
+        weatherIcon.src = weatherIcons.moon;
+      }
+    }
+
+    function iconForWeather(code, isDay) {
+      if (!isDay) return weatherIcons.moon;
+      if (code === 0 || code === 1) return weatherIcons.sun;
+      if (code === 2) return weatherIcons.partly;
+      if (code === 3 || code === 45 || code === 48) return weatherIcons.cloud;
+      if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) return weatherIcons.rain;
+      if ((code >= 71 && code <= 77) || (code >= 85 && code <= 86)) return weatherIcons.snow;
+      if (code >= 95 && code <= 99) return weatherIcons.thunder;
+      return weatherIcons.cloud;
+    }
+
+    async function setWeatherIcon() {
+      const params = new URLSearchParams({
+        latitude: "47.3769",
+        longitude: "8.5417",
+        current: "is_day,weather_code",
+        timezone: "auto"
+      });
+
+      try {
+        const response = await fetch(`https://api.open-meteo.com/v1/forecast?${params}`);
+        if (!response.ok) throw new Error("Weather unavailable");
+
+        const data = await response.json();
+        const current = data.current;
+        const code = Number(current.weather_code);
+        const isDay = Number(current.is_day) === 1;
+        weatherIcon.src = iconForWeather(code, isDay);
+      } catch (error) {
+        setGreeting();
+      }
+    }
+
+    setGreeting();
+    setWeatherIcon();
+  </script>
 </body>
 </html>

@@ -1,0 +1,25 @@
+# macOS metadata
+.DS_Store
+**/.DS_Store
+
+# Design/source archives that are not served directly
+assets/climate-icons-hosseinian.sketch
+assets/climate-icons-hosseinian.zip
+ink_weather_icons.zip
+
+# Extracted Sketch internals; the cropped weather icons are the site assets
+assets/climate-icons/images/
+assets/climate-icons/previews/
+
+# Local experiments not used by the current homepage
+flow-art/
+ink-house/
+house.png
+ink_weather_icons/
+sketch.js
+
+# Dependency/build folders, if added later
+node_modules/
+dist/
+build/
+.cache/
