@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Projects | Akhil Ratan Misra</title>
+  <meta name="description" content="Projects by Akhil Ratan Misra." />
+  <style>
+    :root {
+      --ink: #050505;
+      --line: #0b2732;
+      --paper: #ffffff;
+      --muted: #4d4d4d;
+      --faint: #e6eaec;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      min-height: 100%;
+      margin: 0;
+    }
+
+    body {
+      background: var(--paper);
+      color: var(--ink);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    a {
+      color: inherit;
+    }
+
+    .page {
+      min-height: 100svh;
+      padding: clamp(30px, 4vw, 66px) clamp(28px, 8vw, 148px) clamp(46px, 8vh, 108px);
+    }
+
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      margin-bottom: clamp(56px, 9vh, 110px);
+    }
+
+    .home-link {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      text-decoration: none;
+      font-size: clamp(1.05rem, 1.45vw, 1.48rem);
+      font-weight: 650;
+    }
+
+    .home-link img {
+      width: 52px;
+      aspect-ratio: 1;
+      border: 3px solid var(--line);
+      border-radius: 50%;
+      object-fit: cover;
+      object-position: center 30%;
+    }
+
+    .home-link:focus-visible,
+    .page-link:focus-visible,
+    .project-card:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 8px;
+    }
+
+    .page-nav {
+      display: flex;
+      align-items: center;
+      gap: clamp(30px, 4vw, 72px);
+    }
+
+    .page-link {
+      display: grid;
+      grid-template-columns: 46px auto;
+      align-items: center;
+      gap: 12px;
+      width: max-content;
+      text-decoration: none;
+      font-size: clamp(1.05rem, 1.45vw, 1.48rem);
+      font-weight: 520;
+      line-height: 1;
+    }
+
+    .page-link[aria-current="page"] span:last-child {
+      text-decoration: underline;
+      text-decoration-thickness: 2px;
+      text-underline-offset: 6px;
+    }
+
+    .arrow {
+      position: relative;
+      width: 44px;
+      height: 14px;
+      transition: transform 180ms ease;
+    }
+
+    .arrow::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      width: 34px;
+      height: 2px;
+      background: currentColor;
+      transform: translateY(-50%);
+    }
+
+    .arrow::after {
+      content: "";
+      position: absolute;
+      right: 2px;
+      top: 50%;
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 11px solid currentColor;
+      transform: translateY(-50%);
+    }
+
+    .page-link:hover .arrow,
+    .page-link:focus-visible .arrow,
+    a.project-card:hover .arrow,
+    a.project-card:focus-visible .arrow {
+      transform: translateX(9px);
+    }
+
+    .heading {
+      margin: 0 0 18px;
+      font-size: clamp(1.65rem, 3vw, 3.1rem);
+      font-weight: 480;
+      line-height: 1.1;
+    }
+
+    .lede {
+      max-width: 66ch;
+      margin: 0 0 clamp(44px, 7vh, 80px);
+      color: var(--muted);
+      font-size: clamp(1rem, 1.25vw, 1.25rem);
+      line-height: 1.6;
+    }
+
+    .project-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(36px, 5vw, 72px) clamp(28px, 4vw, 64px);
+    }
+
+    .project-card {
+      display: grid;
+      grid-template-rows: auto auto auto 1fr auto;
+      justify-items: start;
+      text-decoration: none;
+    }
+
+    .thumb {
+      width: clamp(120px, 11vw, 168px);
+      aspect-ratio: 1;
+      margin-bottom: 26px;
+      border: 4px solid var(--line);
+      border-radius: 50%;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      background: var(--paper);
+      color: var(--line);
+      font-size: clamp(1.4rem, 1.8vw, 2rem);
+      font-weight: 650;
+      letter-spacing: 0.04em;
+      transition: transform 180ms ease;
+    }
+
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    a.project-card:hover .thumb,
+    a.project-card:focus-visible .thumb {
+      transform: translateY(-4px);
+    }
+
+    .placeholder .thumb {
+      border-style: dashed;
+      color: var(--muted);
+      background: var(--faint);
+    }
+
+    .tag {
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 0.84rem;
+      font-weight: 560;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .project-card h2 {
+      margin: 0 0 10px;
+      font-size: clamp(1.25rem, 1.7vw, 1.7rem);
+      font-weight: 700;
+      line-height: 1.15;
+    }
+
+    .project-card p {
+      max-width: 40ch;
+      margin: 0 0 18px;
+      color: var(--muted);
+      font-size: clamp(0.98rem, 1.05vw, 1.08rem);
+      line-height: 1.55;
+    }
+
+    .card-link {
+      display: grid;
+      grid-template-columns: 46px auto;
+      align-items: center;
+      gap: 12px;
+      font-weight: 560;
+    }
+
+    .placeholder .card-link {
+      color: var(--muted);
+      font-weight: 480;
+    }
+
+    @media (max-width: 980px) {
+      .top-bar {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .page-nav {
+        flex-wrap: wrap;
+        gap: 18px 28px;
+      }
+
+      .page-link,
+      .card-link {
+        grid-template-columns: 38px auto;
+        gap: 10px;
+      }
+
+      .arrow {
+        width: 38px;
+      }
+
+      .arrow::before {
+        width: 29px;
+      }
+
+      .project-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .page {
+        padding: 26px 22px 42px;
+      }
+
+      .project-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="page">
+    <header class="top-bar">
+      <a class="home-link" href="index.html">
+        <img src="assets/akhil_portrait.jpg" alt="" />
+        <span>Akhil Ratan Misra</span>
+      </a>
+      <nav class="page-nav" aria-label="Site pages">
+        <a class="page-link" href="research.html"><span class="arrow" aria-hidden="true"></span><span>Research</span></a>
+        <a class="page-link" href="projects.html" aria-current="page"><span class="arrow" aria-hidden="true"></span><span>Projects</span></a>
+        <a class="page-link" href="blog.html"><span class="arrow" aria-hidden="true"></span><span>Blog</span></a>
+      </nav>
+    </header>
+
+    <h1 class="heading">&lt; Projects &gt;</h1>
+    <p class="lede">
+      Things I have built and am building. Descriptions and links are on the way.
+    </p>
+
+    <section class="project-grid" aria-label="Projects">
+      <article class="project-card placeholder">
+        <div class="thumb" aria-hidden="true">01</div>
+        <span class="tag">Coming soon</span>
+        <h2>Project title</h2>
+        <p>A one-line description of the project will go here.</p>
+        <span class="card-link"><span class="arrow" aria-hidden="true"></span><span>Details soon</span></span>
+      </article>
+
+      <article class="project-card placeholder">
+        <div class="thumb" aria-hidden="true">02</div>
+        <span class="tag">Coming soon</span>
+        <h2>Project title</h2>
+        <p>A one-line description of the project will go here.</p>
+        <span class="card-link"><span class="arrow" aria-hidden="true"></span><span>Details soon</span></span>
+      </article>
+
+      <article class="project-card placeholder">
+        <div class="thumb" aria-hidden="true">03</div>
+        <span class="tag">Coming soon</span>
+        <h2>Project title</h2>
+        <p>A one-line description of the project will go here.</p>
+        <span class="card-link"><span class="arrow" aria-hidden="true"></span><span>Details soon</span></span>
+      </article>
+
+      <article class="project-card placeholder">
+        <div class="thumb" aria-hidden="true">04</div>
+        <span class="tag">Coming soon</span>
+        <h2>Project title</h2>
+        <p>A one-line description of the project will go here.</p>
+        <span class="card-link"><span class="arrow" aria-hidden="true"></span><span>Details soon</span></span>
+      </article>
+
+      <article class="project-card placeholder">
+        <div class="thumb" aria-hidden="true">05</div>
+        <span class="tag">Coming soon</span>
+        <h2>Project title</h2>
+        <p>A one-line description of the project will go here.</p>
+        <span class="card-link"><span class="arrow" aria-hidden="true"></span><span>Details soon</span></span>
+      </article>
+
+      <article class="project-card placeholder">
+        <div class="thumb" aria-hidden="true">06</div>
+        <span class="tag">Coming soon</span>
+        <h2>Project title</h2>
+        <p>A one-line description of the project will go here.</p>
+        <span class="card-link"><span class="arrow" aria-hidden="true"></span><span>Details soon</span></span>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
