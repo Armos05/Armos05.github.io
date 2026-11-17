@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fly Connectome Navigation Lab | Akhil Ratan Misra</title>
+  <meta
+    name="description"
+    content="A fruit fly learns to find a cupcake using a circuit modelled on its real brain, with every active neuron shown at its real FlyWire position."
+  />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <main class="project-shell">
+    <header class="project-header">
+      <a class="back-link" href="../../index.html">Akhil Ratan Misra</a>
+      <p class="kicker">Neuroscience / Connectome Lab</p>
+      <h1>Fly Connectome Navigation Lab</h1>
+      <p class="lede">
+        A fruit fly is dropped into an arena with a cupcake it cannot see. All it
+        has is two antennae, a view of the walls, and a spiking brain wired with
+        real FlyWire synapses. Press <strong>Train</strong> and watch it get faster
+        at finding the cupcake. Then press <strong>Test</strong> to see what it has
+        learned. On the right, the glass brain flashes each real neuron as it spikes.
+      </p>
+    </header>
+
+    <section class="lab">
+      <section class="arena-panel" aria-label="Fly arena and glass brain">
+        <div class="screen">
+          <canvas id="arena" width="1400" height="700"></canvas>
+        </div>
+        <div class="controls" aria-label="Simulation controls">
+          <button type="button" id="train-mode" class="is-active">Train</button>
+          <button type="button" id="test-mode">Test</button>
+          <button type="button" id="reset-brain">Reset Brain</button>
+          <label>
+            <input type="checkbox" id="show-plume" checked />
+            Odor plume
+          </label>
+          <label>
+            <input type="checkbox" id="show-value" checked />
+            Gradient field
+          </label>
+          <span class="control-hint">Click the arena to move the cupcake.</span>
+        </div>
+      </section>
+
+      <section class="readout" aria-label="Learning readout">
+        <div class="panel curve-panel">
+          <h2>Steps To Cupcake</h2>
+          <div class="stat-grid">
+            <div>
+              <span class="label">Trial</span>
+              <strong id="trial-label">1</strong>
+            </div>
+            <div>
+              <span class="label">Cupcake finds</span>
+              <strong id="finds-label">0</strong>
+            </div>
+            <div>
+              <span class="label">Median, last 10 trials</span>
+              <strong id="median-label">-</strong>
+            </div>
+            <div>
+              <span class="label">Last test</span>
+              <strong id="test-label">-</strong>
+            </div>
+          </div>
+          <div class="chart-screen">
+            <canvas id="curve" width="760" height="300"></canvas>
+          </div>
+          <p class="chart-note">
+            One bar per trial. Black bars are training trials, blue bars are test
+            runs, and pink bars are runs where the fly gave up. The line is the
+            running median. It falls as the fly learns.
+          </p>
+        </div>
+
+        <div class="panel">
+          <h2>Brain Regions Right Now</h2>
+          <div class="region-list" id="region-list"></div>
+          <p class="live-caption" id="live-caption">Loading the connectome...</p>
+          <div class="signal-grid">
+            <div>
+              <span class="label">Smell at antennae</span>
+              <strong id="odor-label">0.00</strong>
+            </div>
+            <div>
+              <span class="label">Expected reward</span>
+              <strong id="value-label">0.00</strong>
+            </div>
+            <div>
+              <span class="label">Dopamine error</span>
+              <strong id="rpe-label">0.00</strong>
+            </div>
+            <div>
+              <span class="label">Anatomy</span>
+              <strong id="stage-label">Loading</strong>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel">
+          <h2>What Changed With Learning</h2>
+          <div class="compare-key">
+            <span><i class="key early"></i>first 5 trials</span>
+            <span><i class="key late"></i>latest 5 trials</span>
+          </div>
+          <div class="compare-list" id="compare-list"></div>
+          <p>
+            Train for about 10 trials to fill this in. As the fly learns, the dopamine
+            burst at the sugar shrinks because the reward is no longer a surprise.
+            Avoid-MBON output drops, the central-complex goal signal grows, and the
+            fly turns less. The Kenyon cells themselves don't change. What changes is
+            the strength of their synapses onto the output neurons.
+          </p>
+        </div>
+      </section>
+    </section>
+
+    <section class="data-panel" aria-label="Model versus fly recordings">
+      <h2>Model Vs Fly Recordings</h2>
+      <div class="data-table" id="data-table"></div>
+      <p class="chart-note">Measured live from this run. Train for a few minutes to fill in every row.</p>
+    </section>
+
+    <details class="fold">
+      <summary>How This Works</summary>
+      <ul>
+        <li><strong>Train:</strong> the fly runs trial after trial. Sugar at the cupcake triggers dopamine, and the bars get shorter.</li>
+        <li><strong>Test:</strong> learning is frozen for one run. Press Reset Brain, then Test, to compare with an untrained fly.</li>
+        <li><strong>Smell:</strong> odor arrives in patchy puffs blown by a meandering wind, \(c = \sum_p \tfrac{m}{r_p^2}\, e^{-d_p^2/2r_p^2}\).</li>
+        <li><strong>Odor on / off:</strong> while smelling, the fly runs upwind; once the odor is lost, it slows, casts and drifts back.</li>
+        <li><strong>Real wiring:</strong> each model neuron carries every FlyWire synapse of its cell type and side, 631,412 in all; ORN-to-PN, PN-to-KC, PN-to-LH and KC-to-MBON weights come from them.</li>
+        <li><strong>Spiking brain:</strong> 977 leaky integrate-and-fire neurons, \(\tau_m \dot v = v_0 - v + g\). The AL, LH, KCs, APL and MBONs fire only through real synapses; ORNs, DANs and the CX fire random spikes at model rates.</li>
+        <li><strong>Value:</strong> \(V = \sum_k \mathrm{KC}_k\,(a_k w^{\text{ap}}_k - b_k w^{\text{av}}_k)\), with \(a_k, b_k\) each KC's real synapses onto approach and avoid MBONs.</li>
+        <li><strong>Dopamine:</strong> the surprise \(\delta = r + \gamma V' - V\); \(\delta &gt; 0\) weakens KC-to-avoid synapses, \(\delta &lt; 0\) KC-to-approach, and the opposite side recovers.</li>
+        <li><strong>Steering:</strong> the fly turns by \(\sin(\theta_{\text{goal}} - \theta)\) toward the remembered food vector plus the wind goal.</li>
+        <li><strong>Gradient field:</strong> pink is the expected reward, and the arrows show where the fly would steer in the average plume.</li>
+        <li><strong>Glass brain:</strong> each flash is a simulated spike, with lines to the neuron's 3 strongest real targets; bars show region rates in Hz.</li>
+        <li><strong>Data check:</strong> the table under the readouts compares this run with published fly recordings, live.</li>
+        <li><strong>Limits:</strong> steering and learning still run on the rate model, with spikes alongside; the CX and DNs follow model rates; synapse and claw gains are calibrated.</li>
+      </ul>
+    </details>
+
+    <details class="fold">
+      <summary>What Matches The Literature</summary>
+      <ul>
+        <li><strong>Wiring:</strong> real FlyWire synapse counts and transmitter signs, summed per cell type. <em>Real data, type-level</em> (Dorkenwald 2024; Shiu 2024).</li>
+        <li><strong>Spiking neurons</strong> use the whole-brain LIF constants; two gains are tuned. <em>Partly calibrated</em> (Shiu 2024).</li>
+        <li><strong>ORN + AL</strong> fire on each puff, favour the same-side antenna and normalize strength. <em>Consistent</em> (Olsen 2010; Gaudry 2013).</li>
+        <li><strong>Plume tracking:</strong> upwind and faster during odor, more turning after it is lost. <em>Consistent</em> (Álvarez-Salvado 2018; Matheson 2022).</li>
+        <li><strong>After losing odor</strong> real flies drift back downwind; the model barely does. <em>Mixed</em> (Álvarez-Salvado 2018).</li>
+        <li><strong>Kenyon cells</strong> fire sparsely (~7%) through real APL feedback, and almost never without odor. <em>Consistent</em> (Honegger 2011; Turner 2008).</li>
+        <li><strong>Dopamine</strong> bursts at sugar, then shrinks about half with training. <em>Prediction; unclear in flies</em> (Liu 2012; Schultz 1997).</li>
+        <li><strong>MBONs</strong> lose avoid-drive where reward was found, specifically, but less than flies (~30% vs 80%). <em>Partly consistent</em> (Hige 2015).</li>
+        <li><strong>Central complex</strong> path-integrates and steers to the goal through PFL3. <em>Consistent; KC vector memory is a hypothesis</em> (Lyu 2022; Westeinde 2024).</li>
+        <li><strong>DNs:</strong> DNa02 turning settles and DNp09 forward drive rises. <em>Consistent</em> (Rayshubskiy 2020; Bidaye 2020).</li>
+        <li><strong>Diverges:</strong> real place memory lives in the central complex, not the mushroom body (Ofstad 2011).</li>
+      </ul>
+    </details>
+
+    <details class="fold">
+      <summary>References</summary>
+      <ul class="refs">
+        <li>Dorkenwald et al. 2024; Schlegel et al. 2024, <em>Nature</em>: the FlyWire whole-brain connectome and annotations (<a href="https://codex.flywire.ai/?dataset=fafb">Codex</a>, <a href="https://github.com/flyconnectome/flywire_annotations">annotations</a>).</li>
+        <li>Olsen, Bhandawat &amp; Wilson 2010, <em>Neuron</em>: divisive normalization in the antennal lobe.</li>
+        <li>Gaudry et al. 2013, <em>Nature</em>: bilateral odor comparison for fast turning.</li>
+        <li>Jefferis et al. 2007, <em>Cell</em>; Dolan et al. 2019, <em>eLife</em>: the lateral horn and innate odor behavior.</li>
+        <li>Caron et al. 2013, <em>Nature</em>: random PN-to-KC connectivity. Lin et al. 2014, <em>Nat. Neurosci.</em>: APL keeps KC codes sparse.</li>
+        <li>Vogt et al. 2016, <em>eLife</em>: visual input to specific Kenyon cell classes.</li>
+        <li>Liu et al. 2012; Burke et al. 2012, <em>Nature</em>: PAM dopamine neurons signal sugar reward.</li>
+        <li>Schultz, Dayan &amp; Montague 1997, <em>Science</em>: dopamine as reward prediction error. Riemensperger et al. 2005, <em>Curr. Biol.</em>: fly DAN responses to conditioned odors.</li>
+        <li>Aso et al. 2014, <em>eLife</em>: MBON valence. Hige et al. 2015, <em>Neuron</em>: dopamine depresses KC-to-MBON synapses. Owald et al. 2015, <em>Neuron</em>.</li>
+        <li>Kim &amp; Dickinson 2017, <em>Curr. Biol.</em>: idiothetic path integration in <em>Drosophila</em>. Corfas, Sharma &amp; Dickinson 2019, <em>eLife</em>: food-triggered local search.</li>
+        <li>Stone et al. 2017, <em>Curr. Biol.</em>: a central-complex model of path integration. Lyu, Abbott &amp; Maimon 2022, <em>Nature</em>: vector computation in the fly CX.</li>
+        <li>Seelig &amp; Jayaraman 2015, <em>Nature</em>: the EPG heading bump. Westeinde et al. 2024, <em>Nature</em>: PFL3 turns heading and goal into steering.</li>
+        <li>Matheson et al. 2022, <em>Nat. Commun.</em>: an odor-gated wind pathway in the fan-shaped body for upwind navigation.</li>
+        <li>Álvarez-Salvado et al. 2018, <em>eLife</em>: upwind runs at odor onset and local search at odor offset in walking flies.</li>
+        <li>Farrell et al. 2002, <em>Environ. Fluid Mech.</em>: filament model of turbulent odor plumes.</li>
+        <li>Shiu et al. 2024, <em>Nature</em>: a leaky integrate-and-fire model of the whole fly brain (<a href="https://github.com/philshiu/Drosophila_brain_model">model and connectivity</a>).</li>
+        <li>Honegger, Campbell &amp; Turner 2011, <em>J. Neurosci.</em>: about 5% of Kenyon cells respond to an odor. Turner, Bazhenov &amp; Laurent 2008, <em>J. Neurophysiol.</em>: sparse KC responses and rare spontaneous firing.</li>
+        <li>Rayshubskiy et al. 2020, <em>bioRxiv</em>: DNa02 steering. Bidaye et al. 2020, <em>Neuron</em>: DNp09 forward walking.</li>
+        <li>Ofstad, Zuker &amp; Reiser 2011, <em>Nature</em>: visual place learning in <em>Drosophila</em>.</li>
+        <li><a href="https://github.com/alextitonis/fly.ai">fly.ai</a> and <a href="https://github.com/NeLy-EPFL/NeuroMechFly">NeuroMechFly</a>: inspiration for connectome-driven and embodied fly simulations.</li>
+      </ul>
+    </details>
+  </main>
+
+  <script src="script.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+  <script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"
+    onload="renderMathInElement(document.body, { delimiters: [{ left: '\\(', right: '\\)', display: false }] })"></script>
+</body>
+</html>

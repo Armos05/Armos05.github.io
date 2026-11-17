@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Fly Glass Brain Connectome Projection",
+  "type": "object",
+  "required": ["source", "nodes"],
+  "properties": {
+    "source": { "type": "string", "description": "Human-readable data source label." },
+    "dataset": { "type": "string" },
+    "created_by": { "type": "string" },
+    "notes": { "type": "string" },
+    "extent_um": {
+      "type": "array",
+      "items": { "type": "number" },
+      "minItems": 3,
+      "maxItems": 3,
+      "description": "Physical span of the normalized x, y, z axes in micrometres; used to keep the projection's aspect ratio."
+    },
+    "total_neurons": { "type": "integer", "description": "Neurons in the source dataset." },
+    "context_scale": { "type": "integer", "description": "Quantization of the context coordinates (65535 for context_file, 1000 for inline context)." },
+    "context_file": { "type": "string", "description": "Binary file next to this JSON with little-endian uint16 x/y/z triplets for the glass cloud." },
+    "context_count": { "type": "integer" },
+    "context": {
+      "type": "array",
+      "items": { "type": "integer", "minimum": 0 },
+      "description": "Flat [x, y, z, x, y, z, ...] of whole-brain sample neurons, drawn faintly as the glass outline."
+    },
+    "nodes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["x", "y", "group"],
+        "properties": {
+          "x": { "type": "number", "minimum": 0, "maximum": 1, "description": "fly left -> right" },
+          "y": { "type": "number", "minimum": 0, "maximum": 1, "description": "dorsal -> ventral" },
+          "z": { "type": "number", "minimum": 0, "maximum": 1, "description": "anterior -> posterior" },
+          "region": { "type": "string", "enum": ["orn", "al", "lh", "mb", "dan", "mbon", "cx", "dn"] },
+          "group": {
+            "type": "string",
+            "enum": ["orn", "pn", "ln", "lh", "kc_olf", "kc_vis", "apl", "pam", "ppl1", "mbon_av", "mbon_ap", "epg", "pen", "fc2", "pfl3", "dna02", "dnp09", "dn"],
+            "description": "Model population this neuron stands in for."
+          },
+          "side": { "type": "string", "enum": ["left", "right", "center", "na"] },
+          "glom": { "type": "string", "description": "Antennal lobe glomerulus (ORNs and PNs)." },
+          "drive": { "type": "number", "description": "Relative cupcake-odor drive of the glomerulus." },
+          "cell_type": { "type": "string" },
+          "body_id": { "type": ["string", "number"], "description": "FlyWire root id." }
+        }
+      }
+    }
+  }
+}

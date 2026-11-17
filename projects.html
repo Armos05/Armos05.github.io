@@ -68,7 +68,7 @@
 
     .home-link:focus-visible,
     .page-link:focus-visible,
-    .project-card:focus-visible {
+    .post summary:focus-visible {
       outline: 2px solid var(--ink);
       outline-offset: 8px;
     }
@@ -128,8 +128,8 @@
 
     .page-link:hover .arrow,
     .page-link:focus-visible .arrow,
-    a.project-card:hover .arrow,
-    a.project-card:focus-visible .arrow {
+    .post summary:hover .arrow,
+    .post summary:focus-visible .arrow {
       transform: translateX(9px);
     }
 
@@ -148,56 +148,106 @@
       line-height: 1.6;
     }
 
-    .project-grid {
+    .post-list {
+      max-width: 980px;
+      border-top: 2px solid var(--line);
+    }
+
+    .post {
+      border-bottom: 2px solid var(--line);
+    }
+
+    .post summary {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: clamp(36px, 5vw, 72px) clamp(28px, 4vw, 64px);
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: clamp(20px, 3vw, 48px);
+      align-items: center;
+      padding: clamp(24px, 3vw, 34px) 0;
+      cursor: pointer;
+      list-style: none;
     }
 
-    .project-card {
+    .post summary::-webkit-details-marker {
+      display: none;
+    }
+
+    .post summary:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 8px;
+    }
+
+    .post h2 {
+      margin: 0;
+      font-size: clamp(1.2rem, 1.6vw, 1.6rem);
+      font-weight: 700;
+      line-height: 1.2;
+    }
+
+    .toggle {
       display: grid;
-      grid-template-rows: auto auto auto 1fr auto;
-      justify-items: start;
-      text-decoration: none;
+      grid-template-columns: 46px auto;
+      align-items: center;
+      gap: 12px;
+      font-weight: 560;
+      white-space: nowrap;
     }
 
-    .thumb {
-      width: clamp(120px, 11vw, 168px);
-      aspect-ratio: 1;
-      margin-bottom: 26px;
-      border: 4px solid var(--line);
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      overflow: hidden;
-      background: var(--paper);
-      color: var(--line);
-      font-size: clamp(1.4rem, 1.8vw, 2rem);
-      font-weight: 650;
-      letter-spacing: 0.04em;
-      transition: transform 180ms ease;
+    .post summary:hover .arrow,
+    .post summary:focus-visible .arrow {
+      transform: translateX(9px);
     }
 
-    .thumb img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
+    .post .when-open,
+    .post[open] .when-closed {
+      display: none;
     }
 
-    a.project-card:hover .thumb,
-    a.project-card:focus-visible .thumb {
-      transform: translateY(-4px);
+    .post[open] .when-open {
+      display: inline;
     }
 
-    .placeholder .thumb {
-      border-style: dashed;
+    .post-body {
+      max-width: 68ch;
+      padding: 0 0 clamp(28px, 4vw, 44px);
+      animation: reveal 260ms ease;
+    }
+
+    .post-body p {
+      margin: 0 0 18px;
+      color: var(--ink);
+      font-size: clamp(1rem, 1.15vw, 1.15rem);
+      line-height: 1.7;
+    }
+
+    .post-body .refs {
+      margin: 28px 0 0;
       color: var(--muted);
-      background: var(--faint);
+      font-size: 0.92rem;
+      line-height: 1.6;
+      overflow-wrap: anywhere;
     }
 
-    .tag {
-      margin-bottom: 10px;
+    @keyframes reveal {
+      from {
+        opacity: 0;
+        transform: translateY(-6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .post-body {
+        animation: none;
+      }
+    }
+
+    .post .tag {
+      display: block;
+      margin-bottom: 8px;
       color: var(--muted);
       font-size: 0.84rem;
       font-weight: 560;
@@ -205,32 +255,23 @@
       letter-spacing: 0.08em;
     }
 
-    .project-card h2 {
-      margin: 0 0 10px;
-      font-size: clamp(1.25rem, 1.7vw, 1.7rem);
-      font-weight: 700;
-      line-height: 1.15;
-    }
-
-    .project-card p {
-      max-width: 40ch;
-      margin: 0 0 18px;
-      color: var(--muted);
-      font-size: clamp(0.98rem, 1.05vw, 1.08rem);
-      line-height: 1.55;
-    }
-
-    .card-link {
-      display: grid;
+    .project-link {
+      display: inline-grid;
       grid-template-columns: 46px auto;
       align-items: center;
       gap: 12px;
-      font-weight: 560;
+      font-weight: 600;
+      text-decoration: none;
     }
 
-    .placeholder .card-link {
-      color: var(--muted);
-      font-weight: 480;
+    .project-link:hover .arrow,
+    .project-link:focus-visible .arrow {
+      transform: translateX(9px);
+    }
+
+    .project-link:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 6px;
     }
 
     @media (max-width: 980px) {
@@ -245,7 +286,8 @@
       }
 
       .page-link,
-      .card-link {
+      .toggle,
+      .project-link {
         grid-template-columns: 38px auto;
         gap: 10px;
       }
@@ -257,10 +299,6 @@
       .arrow::before {
         width: 29px;
       }
-
-      .project-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
     }
 
     @media (max-width: 600px) {
@@ -268,8 +306,9 @@
         padding: 26px 22px 42px;
       }
 
-      .project-grid {
+      .post summary {
         grid-template-columns: 1fr;
+        gap: 14px;
       }
     }
   </style>
@@ -290,57 +329,75 @@
 
     <h1 class="heading">&lt; Projects &gt;</h1>
     <p class="lede">
-      Things I have built and am building. Descriptions and links are on the way.
+      Things I have built and am building.
     </p>
 
-    <section class="project-grid" aria-label="Projects">
-      <article class="project-card placeholder">
-        <div class="thumb" aria-hidden="true">01</div>
-        <span class="tag">Coming soon</span>
-        <h2>Project title</h2>
-        <p>A one-line description of the project will go here.</p>
-        <span class="card-link"><span class="arrow" aria-hidden="true"></span><span>Details soon</span></span>
-      </article>
+    <section class="post-list" aria-label="Projects">
+      <details class="post">
+        <summary>
+          <div>
+            <span class="tag">Computational neuroscience</span>
+            <h2>Fly Connectome Navigation Lab</h2>
+          </div>
+          <span class="toggle">
+            <span class="arrow" aria-hidden="true"></span>
+            <span><span class="when-closed">Read more</span><span class="when-open">Close</span></span>
+          </span>
+        </summary>
+        <div class="post-body">
+          <p>
+            A fruit fly learns to find a hidden cupcake using a spiking brain wired with 631,412 real FlyWire synapses.
+          </p>
+          <p>
+            Watch it smell, learn from dopamine and steer, with every neuron flashing at its real position in the brain.
+          </p>
+          <a class="project-link" href="projects/fly-brain-place-cells/"><span class="arrow" aria-hidden="true"></span><span>Open the lab</span></a>
+        </div>
+      </details>
 
-      <article class="project-card placeholder">
-        <div class="thumb" aria-hidden="true">02</div>
-        <span class="tag">Coming soon</span>
-        <h2>Project title</h2>
-        <p>A one-line description of the project will go here.</p>
-        <span class="card-link"><span class="arrow" aria-hidden="true"></span><span>Details soon</span></span>
-      </article>
+      <details class="post">
+        <summary>
+          <div>
+            <span class="tag">Case study</span>
+            <h2>What if Migros buys Coop?</h2>
+          </div>
+          <span class="toggle">
+            <span class="arrow" aria-hidden="true"></span>
+            <span><span class="when-closed">Read more</span><span class="when-open">Close</span></span>
+          </span>
+        </summary>
+        <div class="post-body">
+          <p>
+            An antitrust risk assessment of a hypothetical Swiss grocery merger, built on real Swiss geography and public data.
+          </p>
+          <p>
+            A spatial demand model, a simulated digital twin and causal machine learning show which local markets raise concerns, and which remedies could get the deal cleared.
+          </p>
+          <a class="project-link" href="https://github.com/Armos05/spatial-merger-analysis"><span class="arrow" aria-hidden="true"></span><span>View on GitHub</span></a>
+        </div>
+      </details>
 
-      <article class="project-card placeholder">
-        <div class="thumb" aria-hidden="true">03</div>
-        <span class="tag">Coming soon</span>
-        <h2>Project title</h2>
-        <p>A one-line description of the project will go here.</p>
-        <span class="card-link"><span class="arrow" aria-hidden="true"></span><span>Details soon</span></span>
-      </article>
-
-      <article class="project-card placeholder">
-        <div class="thumb" aria-hidden="true">04</div>
-        <span class="tag">Coming soon</span>
-        <h2>Project title</h2>
-        <p>A one-line description of the project will go here.</p>
-        <span class="card-link"><span class="arrow" aria-hidden="true"></span><span>Details soon</span></span>
-      </article>
-
-      <article class="project-card placeholder">
-        <div class="thumb" aria-hidden="true">05</div>
-        <span class="tag">Coming soon</span>
-        <h2>Project title</h2>
-        <p>A one-line description of the project will go here.</p>
-        <span class="card-link"><span class="arrow" aria-hidden="true"></span><span>Details soon</span></span>
-      </article>
-
-      <article class="project-card placeholder">
-        <div class="thumb" aria-hidden="true">06</div>
-        <span class="tag">Coming soon</span>
-        <h2>Project title</h2>
-        <p>A one-line description of the project will go here.</p>
-        <span class="card-link"><span class="arrow" aria-hidden="true"></span><span>Details soon</span></span>
-      </article>
+      <details class="post">
+        <summary>
+          <div>
+            <span class="tag">Generative art</span>
+            <h2>Art in Processing</h2>
+          </div>
+          <span class="toggle">
+            <span class="arrow" aria-hidden="true"></span>
+            <span><span class="when-closed">Read more</span><span class="when-open">Close</span></span>
+          </span>
+        </summary>
+        <div class="post-body">
+          <p>
+            Generative art written in the Processing language: blobs, fractals, de Jong attractors, planets and circles shaped by noise.
+          </p>
+          <p>
+            Each piece grows from a few lines of code and a little randomness.
+          </p>
+          <a class="project-link" href="https://github.com/Armos05/Processing-Generative-Art"><span class="arrow" aria-hidden="true"></span><span>View on GitHub</span></a>
+        </div>
+      </details>
     </section>
   </main>
 </body>
