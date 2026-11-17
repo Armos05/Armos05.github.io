@@ -148,6 +148,26 @@
       line-height: 1.6;
     }
 
+    .scholar-link {
+      display: inline-grid;
+      grid-template-columns: 46px auto;
+      align-items: center;
+      gap: 12px;
+      color: var(--ink);
+      font-weight: 560;
+      text-decoration: none;
+    }
+
+    .scholar-link:hover .arrow,
+    .scholar-link:focus-visible .arrow {
+      transform: translateX(9px);
+    }
+
+    .scholar-link:focus-visible {
+      outline: 2px solid var(--ink);
+      outline-offset: 6px;
+    }
+
     .entry-list {
       max-width: 980px;
       border-top: 2px solid var(--line);
@@ -269,7 +289,7 @@
 
     <h1 class="heading">&lt; Research &gt;</h1>
     <p class="lede">
-      Papers, preprints and talks. The full list is on the way.
+      <a class="scholar-link" href="https://scholar.google.com/citations?user=gk7aXzwAAAAJ&amp;hl=en"><span class="arrow" aria-hidden="true"></span><span>Google Scholar profile</span></a>
     </p>
 
     <section class="entry-list" aria-label="Publications">
