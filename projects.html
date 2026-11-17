@@ -68,7 +68,8 @@
 
     .home-link:focus-visible,
     .page-link:focus-visible,
-    .post summary:focus-visible {
+    .project summary:focus-visible,
+    .project-link:focus-visible {
       outline: 2px solid var(--ink);
       outline-offset: 8px;
     }
@@ -128,8 +129,10 @@
 
     .page-link:hover .arrow,
     .page-link:focus-visible .arrow,
-    .post summary:hover .arrow,
-    .post summary:focus-visible .arrow {
+    .project summary:hover .arrow,
+    .project summary:focus-visible .arrow,
+    .project-link:hover .arrow,
+    .project-link:focus-visible .arrow {
       transform: translateX(9px);
     }
 
@@ -148,43 +151,70 @@
       line-height: 1.6;
     }
 
-    .post-list {
-      max-width: 980px;
-      border-top: 2px solid var(--line);
-    }
-
-    .post {
-      border-bottom: 2px solid var(--line);
-    }
-
-    .post summary {
+    .project-grid {
       display: grid;
-      grid-template-columns: minmax(0, 1fr) auto;
-      gap: clamp(20px, 3vw, 48px);
-      align-items: center;
-      padding: clamp(24px, 3vw, 34px) 0;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: clamp(36px, 5vw, 72px) clamp(28px, 4vw, 64px);
+      align-items: start;
+    }
+
+    .project summary {
+      display: grid;
+      justify-items: start;
       cursor: pointer;
       list-style: none;
     }
 
-    .post summary::-webkit-details-marker {
+    .project summary::-webkit-details-marker {
       display: none;
     }
 
-    .post summary:focus-visible {
-      outline: 2px solid var(--ink);
-      outline-offset: 8px;
+    .thumb {
+      width: clamp(120px, 11vw, 168px);
+      aspect-ratio: 1;
+      margin-bottom: 26px;
+      border: 4px solid var(--line);
+      border-radius: 50%;
+      overflow: hidden;
+      background: var(--paper);
+      transition: transform 180ms ease;
     }
 
-    .post h2 {
-      margin: 0;
-      font-size: clamp(1.2rem, 1.6vw, 1.6rem);
+    .thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .thumb img[src$="fly.png"] {
+      image-rendering: pixelated;
+    }
+
+    .project summary:hover .thumb,
+    .project summary:focus-visible .thumb {
+      transform: translateY(-4px);
+    }
+
+    .tag {
+      margin-bottom: 10px;
+      color: var(--muted);
+      font-size: 0.84rem;
+      font-weight: 560;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .project h2 {
+      margin: 0 0 16px;
+      font-size: clamp(1.25rem, 1.7vw, 1.7rem);
       font-weight: 700;
-      line-height: 1.2;
+      line-height: 1.15;
     }
 
-    .toggle {
-      display: grid;
+    .toggle,
+    .project-link {
+      display: inline-grid;
       grid-template-columns: 46px auto;
       align-items: center;
       gap: 12px;
@@ -192,39 +222,33 @@
       white-space: nowrap;
     }
 
-    .post summary:hover .arrow,
-    .post summary:focus-visible .arrow {
-      transform: translateX(9px);
-    }
-
-    .post .when-open,
-    .post[open] .when-closed {
+    .project .when-open,
+    .project[open] .when-closed {
       display: none;
     }
 
-    .post[open] .when-open {
+    .project[open] .when-open {
       display: inline;
     }
 
-    .post-body {
-      max-width: 68ch;
-      padding: 0 0 clamp(28px, 4vw, 44px);
+    .project-body {
+      max-width: 40ch;
+      padding-top: 18px;
       animation: reveal 260ms ease;
     }
 
-    .post-body p {
-      margin: 0 0 18px;
-      color: var(--ink);
-      font-size: clamp(1rem, 1.15vw, 1.15rem);
-      line-height: 1.7;
+    .project-body p {
+      margin: 0 0 14px;
+      color: var(--muted);
+      font-size: clamp(0.98rem, 1.05vw, 1.08rem);
+      line-height: 1.6;
     }
 
-    .post-body .refs {
-      margin: 28px 0 0;
-      color: var(--muted);
-      font-size: 0.92rem;
-      line-height: 1.6;
-      overflow-wrap: anywhere;
+    .project-link {
+      margin-top: 4px;
+      color: var(--ink);
+      font-weight: 600;
+      text-decoration: none;
     }
 
     @keyframes reveal {
@@ -240,38 +264,9 @@
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .post-body {
+      .project-body {
         animation: none;
       }
-    }
-
-    .post .tag {
-      display: block;
-      margin-bottom: 8px;
-      color: var(--muted);
-      font-size: 0.84rem;
-      font-weight: 560;
-      text-transform: uppercase;
-      letter-spacing: 0.08em;
-    }
-
-    .project-link {
-      display: inline-grid;
-      grid-template-columns: 46px auto;
-      align-items: center;
-      gap: 12px;
-      font-weight: 600;
-      text-decoration: none;
-    }
-
-    .project-link:hover .arrow,
-    .project-link:focus-visible .arrow {
-      transform: translateX(9px);
-    }
-
-    .project-link:focus-visible {
-      outline: 2px solid var(--ink);
-      outline-offset: 6px;
     }
 
     @media (max-width: 980px) {
@@ -299,6 +294,10 @@
       .arrow::before {
         width: 29px;
       }
+
+      .project-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
     }
 
     @media (max-width: 600px) {
@@ -306,9 +305,8 @@
         padding: 26px 22px 42px;
       }
 
-      .post summary {
+      .project-grid {
         grid-template-columns: 1fr;
-        gap: 14px;
       }
     }
   </style>
@@ -332,69 +330,54 @@
       Things I have built and am building.
     </p>
 
-    <section class="post-list" aria-label="Projects">
-      <details class="post">
+    <section class="project-grid" aria-label="Projects">
+      <details class="project">
         <summary>
-          <div>
-            <span class="tag">Computational neuroscience</span>
-            <h2>Fly Connectome Navigation Lab</h2>
-          </div>
+          <span class="thumb"><img src="assets/projects/fly.png" alt="Pixel drawing of a fly" /></span>
+          <span class="tag">Computational neuroscience</span>
+          <h2>Fly Connectome Navigation Lab</h2>
           <span class="toggle">
             <span class="arrow" aria-hidden="true"></span>
             <span><span class="when-closed">Read more</span><span class="when-open">Close</span></span>
           </span>
         </summary>
-        <div class="post-body">
-          <p>
-            A fruit fly learns to find a hidden cupcake using a spiking brain wired with 631,412 real FlyWire synapses.
-          </p>
-          <p>
-            Watch it smell, learn from dopamine and steer, with every neuron flashing at its real position in the brain.
-          </p>
+        <div class="project-body">
+          <p>A fruit fly learns to find a hidden cupcake using a spiking brain wired with 631,412 real FlyWire synapses.</p>
+          <p>Watch it smell, learn from dopamine and steer, with every neuron flashing at its real position in the brain.</p>
           <a class="project-link" href="projects/fly-brain-place-cells/"><span class="arrow" aria-hidden="true"></span><span>Open the lab</span></a>
         </div>
       </details>
 
-      <details class="post">
+      <details class="project">
         <summary>
-          <div>
-            <span class="tag">Case study</span>
-            <h2>What if Migros buys Coop?</h2>
-          </div>
+          <span class="thumb"><img src="assets/projects/case.png" alt="Case file under a magnifying glass" /></span>
+          <span class="tag">Case study</span>
+          <h2>What if Migros buys Coop?</h2>
           <span class="toggle">
             <span class="arrow" aria-hidden="true"></span>
             <span><span class="when-closed">Read more</span><span class="when-open">Close</span></span>
           </span>
         </summary>
-        <div class="post-body">
-          <p>
-            An antitrust risk assessment of a hypothetical Swiss grocery merger, built on real Swiss geography and public data.
-          </p>
-          <p>
-            A spatial demand model, a simulated digital twin and causal machine learning show which local markets raise concerns, and which remedies could get the deal cleared.
-          </p>
+        <div class="project-body">
+          <p>An antitrust risk assessment of a hypothetical Swiss grocery merger, built on real Swiss geography and public data.</p>
+          <p>A spatial demand model, a simulated digital twin and causal machine learning show which local markets raise concerns, and which remedies could get the deal cleared.</p>
           <a class="project-link" href="https://github.com/Armos05/spatial-merger-analysis"><span class="arrow" aria-hidden="true"></span><span>View on GitHub</span></a>
         </div>
       </details>
 
-      <details class="post">
+      <details class="project">
         <summary>
-          <div>
-            <span class="tag">Generative art</span>
-            <h2>Art in Processing</h2>
-          </div>
+          <span class="thumb"><img src="assets/projects/art.png" alt="Generative line drawing of a curling ribbon" /></span>
+          <span class="tag">Generative art</span>
+          <h2>Art in Processing</h2>
           <span class="toggle">
             <span class="arrow" aria-hidden="true"></span>
             <span><span class="when-closed">Read more</span><span class="when-open">Close</span></span>
           </span>
         </summary>
-        <div class="post-body">
-          <p>
-            Generative art written in the Processing language: blobs, fractals, de Jong attractors, planets and circles shaped by noise.
-          </p>
-          <p>
-            Each piece grows from a few lines of code and a little randomness.
-          </p>
+        <div class="project-body">
+          <p>Generative art written in the Processing language: blobs, fractals, de Jong attractors, planets and circles shaped by noise.</p>
+          <p>Each piece grows from a few lines of code and a little randomness.</p>
           <a class="project-link" href="https://github.com/Armos05/Processing-Generative-Art"><span class="arrow" aria-hidden="true"></span><span>View on GitHub</span></a>
         </div>
       </details>
