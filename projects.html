@@ -222,6 +222,13 @@
       white-space: nowrap;
     }
 
+    .project-links {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 12px;
+    }
+
     .project .when-open,
     .project[open] .when-closed {
       display: none;
@@ -361,7 +368,11 @@
         <div class="project-body">
           <p>An antitrust risk assessment of a hypothetical Swiss grocery merger, built on real Swiss geography and public data.</p>
           <p>A spatial demand model, a simulated digital twin and causal machine learning show which local markets raise concerns, and which remedies could get the deal cleared.</p>
-          <a class="project-link" href="https://github.com/Armos05/spatial-merger-analysis"><span class="arrow" aria-hidden="true"></span><span>View on GitHub</span></a>
+          <div class="project-links">
+            <a class="project-link" href="assets/reports/migros-coop/summary.pdf" target="_blank" rel="noopener"><span class="arrow" aria-hidden="true"></span><span>Read the summary</span></a>
+            <a class="project-link" href="assets/reports/migros-coop/full-report.pdf" target="_blank" rel="noopener"><span class="arrow" aria-hidden="true"></span><span>Read the full report</span></a>
+            <a class="project-link" href="https://github.com/Armos05/spatial-merger-analysis"><span class="arrow" aria-hidden="true"></span><span>View on GitHub</span></a>
+          </div>
         </div>
       </details>
 
